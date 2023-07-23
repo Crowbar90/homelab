@@ -1,0 +1,21 @@
+experimental:
+  v3:
+    enabled: false
+
+ingressRoute:
+  dashboard:
+    enabled: true
+
+additionalArguments:
+  - '--api=true'
+  - '--api.dashboard=true'
+  - '--api.insecure=false'
+  - '--providers.kubernetescrd'
+
+ports:
+  traefik:
+    expose: true
+  websecure:
+    expose: false
+    tls:
+      enabled: false
