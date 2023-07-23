@@ -11,8 +11,14 @@ service:
 persistence:
   config:
     enabled: true
-    mountPath: /data/homeassist
+    mountPath: /config
     retain: true
     size: 5Gi
     storageClass: nfs
 
+addons:
+  codeserver:
+    enabled: true
+    service:
+      enabled: true
+      type: LoadBalancer
