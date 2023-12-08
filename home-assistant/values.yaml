@@ -18,7 +18,7 @@ persistence:
 
 addons:
   codeserver:
-    enabled: true
+    enabled: false
     service:
       enabled: true
       type: LoadBalancer
