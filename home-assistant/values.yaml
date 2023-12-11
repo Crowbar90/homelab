@@ -1,12 +1,8 @@
 image:
-  tag: 2023.7.2
+  tag: 2023.12.1
 
 env:
   TZ: Europe/Rome
-
-service:
-  main:
-    type: LoadBalancer
 
 persistence:
   config:
@@ -16,9 +12,7 @@ persistence:
     size: 5Gi
     storageClass: nfs
 
-addons:
-  codeserver:
-    enabled: false
-    service:
-      enabled: true
-      type: LoadBalancer
+hostNetwork: true
+dnsPolicy: ClusterFirstWithHostNet
+securityContext:
+  privileged: true
