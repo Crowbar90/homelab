@@ -90,7 +90,7 @@ module "kube-config" {
 
 resource "local_file" "kube-config" {
   content         = module.kube-config.stdout
-  filename        = "output/config"
+  filename        = "output/kubeconfig"
   file_permission = "0600"
 }
 
