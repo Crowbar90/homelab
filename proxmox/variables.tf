@@ -1,4 +1,3 @@
-# variables.tf
 variable "pve1-batcave" {
   description = "Proxmox server configuration for pve1-batcave"
   type = object({

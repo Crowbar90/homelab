@@ -1,4 +1,3 @@
-# k8s-config.tf
 resource "proxmox_virtual_environment_download_file" "debian_12_generic_image" {
   provider     = proxmox.pve1-batcave
   node_name    = var.pve1-batcave.node_name

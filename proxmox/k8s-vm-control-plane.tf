@@ -1,4 +1,3 @@
-# k8s-vm-control-plane.tf
 resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
   provider  = proxmox.pve1-batcave
   node_name = var.pve1-batcave.node_name

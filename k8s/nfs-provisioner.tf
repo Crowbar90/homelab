@@ -9,12 +9,12 @@ resource "helm_release" "nfs-provisioner" {
 
   set {
     name  = "nfs.server"
-    value = "tower.batcave"
+    value = var.nfs.server
   }
 
   set {
     name  = "nfs.path"
-    value = "/mnt/user/kubernetes"
+    value = var.nfs.path
   }
 
   set {
