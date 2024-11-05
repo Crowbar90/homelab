@@ -2,12 +2,12 @@
 terraform {
   required_providers {
     proxmox = {
-      source = "bpg/proxmox"
+      source  = "bpg/proxmox"
       version = "0.66.2"
     }
 
     helm = {
-      source = "hashicorp/helm"
+      source  = "hashicorp/helm"
       version = "2.16.1"
     }
   }
@@ -21,7 +21,8 @@ provider "proxmox" {
   api_token = var.pve1-batcave_auth.api_token
 
   ssh {
-    agent = true
+    agent    = true
+    username = var.pve1-batcave.username
   }
 
   tmp_dir = "/var/tmp"

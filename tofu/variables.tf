@@ -5,6 +5,7 @@ variable "pve1-batcave" {
     node_name = string
     endpoint  = string
     insecure  = bool
+    username  = string
   })
 }
 
