@@ -6,6 +6,7 @@ resource "helm_release" "nfs-provisioner" {
   create_namespace = true
   namespace        = "nfs-provisioner"
   atomic           = true
+  cleanup_on_fail  = true
 
   set {
     name  = "nfs.server"

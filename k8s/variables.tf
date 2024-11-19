@@ -5,3 +5,10 @@ variable "nfs" {
     path   = string
   })
 }
+
+variable "postgresql" {
+  description = "PostgreSQL configuration"
+  type = object({
+    postgresPassword = string
+  })
+}

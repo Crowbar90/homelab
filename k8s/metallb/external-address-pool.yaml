@@ -1,0 +1,8 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: batcave
+  namespace: kube-system
+spec:
+  addresses:
+  - 192.168.2.199/32
