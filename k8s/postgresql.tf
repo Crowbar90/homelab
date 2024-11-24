@@ -27,4 +27,8 @@ resource "helm_release" "postgresql" {
     name  = "volumePermissions.enabled"
     value = "true"
   }
-} 
+}
+
+locals {
+  postgresql_host = "${helm_release.postgresql.name}.${helm_release.postgresql.namespace}"
+}
