@@ -1,0 +1,4 @@
+creation_rules:
+  - path_regex: terraform/.*\.sops\.(yaml|yml|json|tfvars)$
+    age: age1s9pcy5q47g2jumr5xkl9arh7n6g9dl89h6apepe6nkkhfp7l64tqw7ey9w
+

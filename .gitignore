@@ -1,0 +1,51 @@
+#############
+# Terraform #
+#############
+
+# State
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Variables
+*.tfvars
+*.tfvars.json
+
+# Overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Working directory
+**/.terraform/*
+
+# Lock (to keep)
+#! .terraform.lock.hcl
+
+########
+# SOPS #
+########
+
+# Keys
+*.agekey
+age.key
+keys.txt
+
+#######
+# NIX #
+#######
+
+# Result symlinks
+result
+result-*
+
+# direnv
+.direnv/
+
+# Local configs
+.envrc
+
