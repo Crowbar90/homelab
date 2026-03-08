@@ -5,6 +5,9 @@ in pkgs.mkShell {
     pkgs.age
     pkgs.gh
     pkgs.git
+    pkgs.k9s
+    pkgs.kubectl
+    pkgs.nixos-rebuild
     pkgs.opentofu
     pkgs.rsync
     pkgs.sops
