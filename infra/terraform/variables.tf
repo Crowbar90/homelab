@@ -21,3 +21,8 @@ variable "proxmox_api_token_secret" {
   sensitive   = true
 }
 
+variable "k3s_nodes_ci_password" {
+  description = "The K3S nodes cloud-init password"
+  type        = string
+  sensitive   = true
+}

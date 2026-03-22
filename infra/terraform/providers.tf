@@ -4,6 +4,10 @@ terraform {
       source  = "telmate/proxmox"
       version = "3.0.2-rc04"
     }
+    proxmox-bpg = {
+      source  = "bpg/proxmox"
+      version = "0.98.1"
+    }
   }
 }
 
@@ -14,3 +18,7 @@ provider "proxmox" {
   pm_tls_insecure     = true
 }
 
+provider "proxmox-bpg" {
+  endpoint  = var.proxmox_api_url
+  api_token = "${var.proxmox_api_token_id}=${var.proxmox_api_token_secret}"
+}

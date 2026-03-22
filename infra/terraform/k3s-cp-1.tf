@@ -38,6 +38,7 @@ resource "proxmox_vm_qemu" "k3s-cp-1" {
 
   ipconfig0 = "ip=192.168.40.41/24,gw=192.168.40.1"
 
-  ciuser = "root"
-  sshkeys = var.ssh_public_key
+  ciuser     = "root"
+  cipassword = var.k3s_nodes_ci_password
+  sshkeys    = var.ssh_public_key
 }
