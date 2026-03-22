@@ -1,12 +1,21 @@
-resource "proxmox_vm_qemu" "k3s-cp-1" {
+data "proxmox_virtual_environment_vms" "template" {
+  node_name = "pve1"
+}
+
+locals {
+  nixos_template_id = [for vm in data.proxmox_virtual_environment_vms.template.vms : vm.vm_id if vm.name == "nixos-template"][0]
+}
+
+resource "proxmox_virtual_environment_vm" "k3s-cp-1" {
   name        = "k3s-cp-1"
-  vmid        = 4041
-  target_node = "pve1"
+  vm_id       = 4041
+  node_name   = "pve1"
+  bios        = "seabios"
 
-  clone      = "nixos-template"
-  full_clone = true
-
-  bios = "seabios"
+  clone {
+    vm_id = local.nixos_template_id
+    full  = true
+  }
 
   cpu {
     cores   = 2
@@ -14,31 +23,42 @@ resource "proxmox_vm_qemu" "k3s-cp-1" {
     type    = "host"
   }
 
-  memory = 4096
+  memory {
+    dedicated = 4096
+  }
 
-  scsihw = "virtio-scsi-pci"
+  disk {
+    datastore_id = "local-lvm"
+    size         = 30
+    interface    = "virtio0"
+  }
 
-  disks {
-    virtio {
-      virtio0 {
-        disk {
-          size    = "30G"
-          storage = "local-lvm"
-        }
+  network_device {
+    bridge  = "vmbr0"
+    model   = "virtio"
+    vlan_id = 40
+  }
+
+  lifecycle {
+    ignore_changes = [
+      clone,
+      initialization,
+      vga,
+      operating_system
+    ]
+  }
+
+  initialization {
+    ip_config {
+      ipv4 {
+        address = "192.168.40.41/24"
+        gateway = "192.168.40.1"
       }
     }
+    user_account {
+      username = "root"
+      password = var.k3s_nodes_ci_password
+      keys     = [var.ssh_public_key]
+    }
   }
-
-  network {
-    id     = "0"
-    model  = "virtio"
-    bridge = "vmbr0"
-    tag    = 40
-  }
-
-  ipconfig0 = "ip=192.168.40.41/24,gw=192.168.40.1"
-
-  ciuser     = "root"
-  cipassword = var.k3s_nodes_ci_password
-  sshkeys    = var.ssh_public_key
 }
