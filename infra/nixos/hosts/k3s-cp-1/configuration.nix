@@ -7,6 +7,17 @@
 
   networking.hostName = "k3s-node1";
 
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/vda";
+
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    autoResize = true;
+    fsType = "ext4";
+  };
+
+  system.stateVersion = "25.11";
+
   # Enable k3s
   services.k3s = {
     enable = true;
