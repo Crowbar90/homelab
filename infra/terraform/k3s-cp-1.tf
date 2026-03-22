@@ -1,19 +1,11 @@
-data "proxmox_virtual_environment_vms" "template" {
-  node_name = "pve1"
-}
-
-locals {
-  nixos_template_id = [for vm in data.proxmox_virtual_environment_vms.template.vms : vm.vm_id if vm.name == "nixos-template"][0]
-}
-
 resource "proxmox_virtual_environment_vm" "k3s-cp-1" {
-  name        = "k3s-cp-1"
-  vm_id       = 4041
-  node_name   = "pve1"
-  bios        = "seabios"
+  name      = "k3s-cp-1"
+  vm_id     = 4041
+  node_name = "pve1"
+  bios      = "seabios"
 
   clone {
-    vm_id = local.nixos_template_id
+    vm_id = 9002
     full  = true
   }
 
