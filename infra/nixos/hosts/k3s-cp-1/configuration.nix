@@ -21,9 +21,21 @@
     ];
   };
 
-  networking.firewall.allowedTCPPorts = [
-    6443  # Kubernetes API
-  ];
+  networking = {
+    interfaces.ens18.ipv4.addresses = [{
+      address = "192.168.40.41";
+      prefixLength = 24;
+    }];
+
+    defaultGateway = {
+      address = "192.168.40.1";
+      interface = "ens18";
+    };
+
+    firewall.allowedTCPPorts = [
+      6443  # Kubernetes API
+    ];
+  };
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
