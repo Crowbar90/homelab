@@ -38,7 +38,7 @@ resource "proxmox_virtual_environment_container" "postgresql" {
     bridge  = "vmbr0"
     vlan_id = 40
   }
-  
+
   unprivileged = false
   started      = true
 

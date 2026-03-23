@@ -53,4 +53,8 @@ resource "proxmox_virtual_environment_vm" "k3s-cp-1" {
       keys     = [var.ssh_public_key]
     }
   }
+
+  agent {
+    enabled = true
+  }
 }
