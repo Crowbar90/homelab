@@ -26,5 +26,21 @@
           ./hosts/k3s-cp-1/configuration.nix
         ];
       };
+
+      nixosConfigurations.k3s-cp-2 = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./modules/base.nix
+          ./hosts/k3s-cp-2/configuration.nix
+        ];
+      };
+
+      nixosConfigurations.k3s-cp-3 = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./modules/base.nix
+          ./hosts/k3s-cp-3/configuration.nix
+        ];
+      };
     };
 }

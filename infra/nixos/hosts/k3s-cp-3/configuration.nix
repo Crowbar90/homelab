@@ -9,21 +9,21 @@
 
   system.stateVersion = "25.11";
 
-  # services.k3s = {
-  #   enable = true;
-  #   role = "server";
-  #   clusterInit = true;
+  networking = {
+    interfaces.ens18.ipv4.addresses = [{
+      address = "192.168.40.43";
+      prefixLength = 24;
+    }];
 
-  #   extraFlags = [
-  #     "--disable=traefik"
-  #     "--write-kubeconfig-mode=0644"
-  #     "--tls-san=192.168.40.41"
-  #   ];
-  # };
+    defaultGateway = {
+      address = "192.168.40.1";
+      interface = "ens18";
+    };
 
-  networking.firewall.allowedTCPPorts = [
-    6443  # Kubernetes API
-  ];
+    firewall.allowedTCPPorts = [
+      6443  # Kubernetes API
+    ];
+  };
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
