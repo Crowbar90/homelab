@@ -1,0 +1,16 @@
+# AI Agent / Antigravity Project Rules
+
+## 1. Secrets and Security
+- **Encryption:** Everything that should be secret MUST be encrypted with `sops` using `age` and then committed.
+- **Unencrypted Files:** Unencrypted files containing secrets should be strictly avoided and created only when absolutely necessary. Make absolutely sure they are never committed to git (e.g., ensure they are added to `.gitignore`). If any decrypted copy of an encrypted file is created, even temporarily, delete them after everything is reviewd and confirmed by the user.
+
+## 2. Infrastructure as Code
+- **Tooling:** ALWAYS use OpenTofu (`tofu`) instead of Terraform (`terraform`). Do not execute `terraform` commands.
+
+## 3. Shell and Environment
+- **Nix Shell:** EVERY action performed in a shell MUST be done within `nix-shell`.
+- **Dependencies:** Any tool that is needed MUST be included in `shell.nix`. If a required tool is missing, add it to `shell.nix` as the first step.
+- **Workflow:** Every activity should start by activating the nix shell (`nix-shell`). All workflow execution should run inside that active session, and the session should only be closed after everything is reviewed and confirmed by the user.
+
+## 4. Git and Version Control
+- **Commit Messages:** All git commit messages MUST follow the "Conventional Commits" specification. They should be descriptive, clear, and accurately reflect the changes made (e.g., `feat: ...`, `fix: ...`, `chore: ...`, `docs: ...`).

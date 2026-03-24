@@ -5,25 +5,13 @@
     ../../modules/vm.nix
   ];
 
-  networking.hostName = "k3s-cp-1";
+  networking.hostName = "k3s-cp-3";
 
   system.stateVersion = "25.11";
 
-  services.k3s = {
-    enable = true;
-    role = "server";
-    clusterInit = true;
-
-    extraFlags = [
-      "--disable=traefik"
-      "--write-kubeconfig-mode=0644"
-      "--tls-san=192.168.40.41"
-    ];
-  };
-
   networking = {
     interfaces.ens18.ipv4.addresses = [{
-      address = "192.168.40.41";
+      address = "192.168.40.43";
       prefixLength = 24;
     }];
 

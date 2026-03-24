@@ -1,6 +1,6 @@
-resource "proxmox_virtual_environment_vm" "k3s-cp-1" {
-  name      = "k3s-cp-1"
-  vm_id     = 4041
+resource "proxmox_virtual_environment_vm" "k3s-cp-3" {
+  name      = "k3s-cp-3"
+  vm_id     = 4043
   node_name = "pve1"
   bios      = "seabios"
 
@@ -43,7 +43,7 @@ resource "proxmox_virtual_environment_vm" "k3s-cp-1" {
   initialization {
     ip_config {
       ipv4 {
-        address = "192.168.40.41/24"
+        address = "192.168.40.43/24"
         gateway = "192.168.40.1"
       }
     }
