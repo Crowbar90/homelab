@@ -3,16 +3,22 @@
 
   inputs = {
     nixpkgs.url = "github:NixOs/nixpkgs/nixos-25.11";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    { self, nixpkgs, ... }:
+    { self, nixpkgs, sops-nix, ... }@inputs:
     let
       system = "x86_64-linux";
     in
     {
       nixosConfigurations.postgresql = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit inputs; };
         modules = [
           ./modules/base.nix
           ./hosts/postgresql/configuration.nix
@@ -21,25 +27,31 @@
 
       nixosConfigurations.k3s-cp-1 = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit inputs; };
         modules = [
           ./modules/base.nix
           ./hosts/k3s-cp-1/configuration.nix
+          sops-nix.nixosModules.sops
         ];
       };
 
       nixosConfigurations.k3s-cp-2 = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit inputs; };
         modules = [
           ./modules/base.nix
           ./hosts/k3s-cp-2/configuration.nix
+          sops-nix.nixosModules.sops
         ];
       };
 
       nixosConfigurations.k3s-cp-3 = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit inputs; };
         modules = [
           ./modules/base.nix
           ./hosts/k3s-cp-3/configuration.nix
+          sops-nix.nixosModules.sops
         ];
       };
     };

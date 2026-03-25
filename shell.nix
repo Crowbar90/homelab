@@ -11,6 +11,7 @@ in pkgs.mkShell {
     pkgs.opentofu
     pkgs.rsync
     pkgs.sops
+    pkgs.ssh-to-age
     pkgs.vim
   ];
 }
