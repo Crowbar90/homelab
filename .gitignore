@@ -31,6 +31,11 @@ override.tf.json
 age.key
 keys.txt
 
+# Decrypted secret files — never commit these
+# Encrypted versions are named *.enc.yaml and are safe to commit
+secrets.yaml
+*.dec.yaml
+
 #######
 # NIX #
 #######

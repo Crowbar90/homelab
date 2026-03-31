@@ -5,6 +5,7 @@ in pkgs.mkShell {
     pkgs.age
     pkgs.gh
     pkgs.git
+    pkgs.helm
     pkgs.k9s
     pkgs.kubectl
     pkgs.nixos-rebuild

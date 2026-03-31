@@ -63,8 +63,12 @@
     "net.bridge.bridge-nf-call-iptables" = 1;
   };
 
+  boot.supportedFilesystems = [ "nfs" ];
+  services.rpcbind.enable = true;
+
   environment.systemPackages = with pkgs; [
     kubectl
     k9s
+    nfs-utils
   ];
 }

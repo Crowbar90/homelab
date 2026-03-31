@@ -1,0 +1,34 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: nfs-subdir-provisioner
+  namespace: kube-system
+spec:
+  bootstrap: true
+  chart: nfs-subdir-external-provisioner
+  repo: https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+  version: "4.0.18"
+  targetNamespace: storage
+  valuesContent: |-
+    storageClass:
+      name: nfs-client
+      defaultClass: false
+      reclaimPolicy: Retain
+      volumeBindingMode: Immediate
+      accessModes: ReadWriteMany
+    nfs:
+      mountOptions:
+        - nfsvers=4.1
+    replicaCount: 2
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
+  valuesSecrets:
+    - name: nfs-subdir-provisioner-secret
+      ignoreUpdates: false
+      keys:
+        - nfs-subdir-external-provisioner
