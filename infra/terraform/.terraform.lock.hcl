@@ -22,3 +22,20 @@ provider "registry.opentofu.org/bpg/proxmox" {
     "zh:f26e0763dbe6a6b2195c94b44696f2110f7f55433dc142839be16b9697fa5597",
   ]
 }
+
+provider "registry.opentofu.org/cloudflare/cloudflare" {
+  version     = "5.19.0-beta.3"
+  constraints = "5.19.0-beta.3"
+  hashes = [
+    "h1:AaGS5480NiTrvp5Bfy1bWKHo+3HpaqayRLDhHnZGWSU=",
+    "zh:09da19cd02050f39272188388899bc3729de45a46ef80356d8f7644de7bce03f",
+    "zh:1f97b53381a8b6b4f5c56e42beb371c2fe0f79efee290dc2425cc216e18b3b66",
+    "zh:296f813c6c3fa635f07d39710c072a8104b6cdee1816d0ca902d70bd4cf01918",
+    "zh:2ce36a32b206acf2e2e3551851259ee5d4cb56c81f467aebd9dfd1ecb841e346",
+    "zh:3a6ff51ca1eb6f3dbed78e13de1bff8d6e5f36d18e025c120ee8d3ec37507340",
+    "zh:d7486e59b5613e1722d4135d803108cff98b40c72bc2f9862010dedc187a14a7",
+    "zh:e0753bee58a121aac95015e6f1e5f2a85011a987d3f359a15036d42fec6a0654",
+    "zh:f4fe1fdd1da7854501abf9490da0f078a07300c1f9658f9daf3ea0f806e139e4",
+    "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
+  ]
+}
