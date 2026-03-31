@@ -19,8 +19,6 @@
     };
   };
 
-  networking.hostName = "k3s-cp-2";
-
   system.stateVersion = "25.11";
 
   services.k3s = {
@@ -38,6 +36,9 @@
   };
 
   networking = {
+    hostName = "k3s-cp-2";
+    nameservers = [ "192.168.40.1" ];
+
     interfaces.ens18.ipv4.addresses = [{
       address = "192.168.40.42";
       prefixLength = 24;

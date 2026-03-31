@@ -1,0 +1,24 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: cloudflared
+  namespace: kube-system
+spec:
+  bootstrap: true
+  chart: cloudflared
+  repo: https://charts.kubito.dev
+  version: "1.7.5"
+  targetNamespace: cloudflared
+  valuesContent: |-
+    replicaCount: 2
+    managed:
+      existingSecret: cloudflared-secret
+    tunnelConfig:
+      name: homelab-k3s
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
