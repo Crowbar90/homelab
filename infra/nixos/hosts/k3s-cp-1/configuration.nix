@@ -28,7 +28,6 @@
     clusterInit = false;
     
     extraFlags = [
-      "--disable=traefik"
       "--write-kubeconfig-mode=0644"
       "--tls-san=192.168.40.41"
     ];
