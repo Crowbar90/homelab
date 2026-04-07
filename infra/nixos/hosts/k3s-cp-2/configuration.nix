@@ -30,7 +30,11 @@
     
     extraFlags = [
       "--write-kubeconfig-mode=0644"
+      "--tls-san=k3s.homelab.middleearth.cc"
+      "--tls-san=192.168.40.40"
+      "--tls-san=192.168.40.41"
       "--tls-san=192.168.40.42"
+      "--tls-san=192.168.40.43"
     ];
   };
 
@@ -45,7 +49,7 @@
 
     defaultGateway = {
       address = "192.168.40.1";
-      interface = "ens18";
+      interface = "enp0s18";
     };
 
     firewall.allowedTCPPorts = [
