@@ -16,5 +16,7 @@
     fsType = "ext4";
   };
 
+  networking.usePredictableInterfaceNames = true;
+
   services.qemuGuest.enable = true;
 }

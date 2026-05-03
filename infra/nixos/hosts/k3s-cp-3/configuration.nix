@@ -40,8 +40,10 @@
 
   networking = {
     hostName = "k3s-cp-3";
+    useDHCP = false;
     nameservers = [ "192.168.40.1" ];
 
+    interfaces.ens18.useDHCP = false;
     interfaces.ens18.ipv4.addresses = [{
       address = "192.168.40.43";
       prefixLength = 24;
@@ -49,7 +51,7 @@
 
     defaultGateway = {
       address = "192.168.40.1";
-      interface = "enp0s18";
+      interface = "ens18";
     };
 
     firewall.allowedTCPPorts = [
