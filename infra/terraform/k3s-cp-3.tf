@@ -66,10 +66,10 @@ resource "proxmox_virtual_environment_vm" "k3s-cp-3" {
     ]
 
     connection {
-      type  = "ssh"
-      user  = "root"
-      agent = true
-      host  = "192.168.40.43"
+      type        = "ssh"
+      user        = "root"
+      private_key = file(pathexpand(var.ssh_private_key_path))
+      host        = "192.168.40.43"
     }
   }
 }

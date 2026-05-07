@@ -63,3 +63,9 @@ variable "age_private_key" {
   type        = string
   sensitive   = true
 }
+
+variable "ssh_private_key_path" {
+  description = "Path to the SSH private key for provisioning"
+  type        = string
+  default     = "~/.ssh/id_ed25519"
+}
