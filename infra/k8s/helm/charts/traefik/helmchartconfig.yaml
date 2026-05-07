@@ -1,0 +1,17 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    hostNetwork: true
+    # We use hostNetwork, so we don't need the Service LoadBalancer
+    service:
+      enabled: false
+    # Force Traefik to listen on all interfaces
+    ports:
+      web:
+        hostPort: 80
+      websecure:
+        hostPort: 443
