@@ -6,7 +6,7 @@ metadata:
 spec:
   chart: home-assistant
   repo: https://pajikos.github.io/home-assistant-helm-chart/
-  version: "2.21.3" # Latest as of now
+  version: "0.3.57"
   targetNamespace: home-assistant
   valuesContent: |-
     image:
