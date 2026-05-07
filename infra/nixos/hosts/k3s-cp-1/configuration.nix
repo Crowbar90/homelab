@@ -49,7 +49,7 @@
       state = "MASTER";
       priority = 150;
       virtualRouterId = 51;
-      virtualIpAddresses = [{ address = "192.168.40.40/24"; }];
+      virtualIps = [{ addr = "192.168.40.40/24"; }];
     };
   };
 
