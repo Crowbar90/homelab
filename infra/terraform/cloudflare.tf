@@ -13,18 +13,18 @@ output "k3s_tunnel_token" {
   value = data.cloudflare_zero_trust_tunnel_cloudflared_token.k3s_tunnel_token.token
   sensitive = true
 }
-resource "cloudflare_record" "k3s_root" {
+resource "cloudflare_dns_record" "k3s_root" {
   zone_id = var.cloudflare_zone_id
   name    = "k3s"
-  value   = "192.168.40.40"
+  content = "192.168.40.40"
   type    = "A"
   proxied = false
 }
 
-resource "cloudflare_record" "k3s_wildcard" {
+resource "cloudflare_dns_record" "k3s_wildcard" {
   zone_id = var.cloudflare_zone_id
   name    = "*.k3s"
-  value   = "k3s.middleearth.cc"
+  content = "k3s.middleearth.cc"
   type    = "CNAME"
   proxied = false
 }
