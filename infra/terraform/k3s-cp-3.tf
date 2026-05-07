@@ -66,10 +66,10 @@ resource "proxmox_virtual_environment_vm" "k3s-cp-3" {
     ]
 
     connection {
-      type     = "ssh"
-      user     = "root"
-      password = var.k3s_nodes_ci_password
-      host     = "192.168.40.43"
+      type  = "ssh"
+      user  = "root"
+      agent = true
+      host  = "192.168.40.43"
     }
   }
 }
