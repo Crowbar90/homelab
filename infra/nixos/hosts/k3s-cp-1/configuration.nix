@@ -77,6 +77,8 @@
     };
 
     firewall.allowedTCPPorts = [
+      80    # HTTP
+      443   # HTTPS
       6443  # Kubernetes API
       2379  # Etcd clients
       2380  # Etcd peers
