@@ -37,6 +37,13 @@
     ];
   };
 
+  services.openssh.hostKeys = [
+    {
+      path = "/etc/ssh/ssh_host_ed25519_key";
+      type = "ed25519";
+    }
+  ];
+
   networking = {
     hostName = "k3s-cp-1";
     useDHCP = false;
