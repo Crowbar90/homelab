@@ -19,6 +19,7 @@ resource "cloudflare_dns_record" "k3s_root" {
   content = "192.168.40.40"
   type    = "A"
   proxied = false
+  ttl     = 1
 }
 
 resource "cloudflare_dns_record" "k3s_wildcard" {
@@ -27,4 +28,5 @@ resource "cloudflare_dns_record" "k3s_wildcard" {
   content = "k3s.middleearth.cc"
   type    = "CNAME"
   proxied = false
+  ttl     = 1
 }
