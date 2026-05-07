@@ -58,3 +58,8 @@ variable "cloudflare_token" {
   type        = string
   sensitive   = true
 }
+variable "age_private_key" {
+  description = "Age private key for sops-nix"
+  type        = string
+  sensitive   = true
+}

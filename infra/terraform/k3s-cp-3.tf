@@ -57,4 +57,19 @@ resource "proxmox_virtual_environment_vm" "k3s-cp-3" {
   agent {
     enabled = true
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p /var/lib/sops-nix",
+      "echo '${var.age_private_key}' > /var/lib/sops-nix/key.txt",
+      "chmod 600 /var/lib/sops-nix/key.txt"
+    ]
+
+    connection {
+      type     = "ssh"
+      user     = "root"
+      password = var.k3s_nodes_ci_password
+      host     = "192.168.40.43"
+    }
+  }
 }

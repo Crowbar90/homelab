@@ -34,7 +34,23 @@
       "--tls-san=192.168.40.41"
       "--tls-san=192.168.40.42"
       "--tls-san=192.168.40.43"
+      "--flannel-iface=ens18"
+      "--node-ip=192.168.40.41"
     ];
+  };
+
+  systemd.services.k3s.after = [ "sops-nix.service" "keepalived.service" ];
+  systemd.services.k3s.wants = [ "sops-nix.service" ];
+
+  services.keepalived = {
+    enable = true;
+    vrrpInstances.VI_1 = {
+      interface = "ens18";
+      state = "MASTER";
+      priority = 150;
+      virtualRouterId = 51;
+      virtualIpAddresses = [{ address = "192.168.40.40/24"; }];
+    };
   };
 
   services.openssh.hostKeys = [
@@ -64,11 +80,18 @@
       6443  # Kubernetes API
       2379  # Etcd clients
       2380  # Etcd peers
+      10250 # Kubelet API
+      7946  # Flannel Serf
     ];
 
     firewall.allowedUDPPorts = [
-      8472  # Flannel
+      8472  # Flannel VXLAN
+      7946  # Flannel Serf
     ];
+
+    firewall.extraCommands = ''
+      iptables -A INPUT -p vrrp -j ACCEPT
+    '';
   };
 
   boot.kernel.sysctl = {
