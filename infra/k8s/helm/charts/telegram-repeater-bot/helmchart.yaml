@@ -5,8 +5,7 @@ metadata:
   namespace: kube-system
 spec:
   bootstrap: false
-  chart: telegram-repeater-bot
-  repo: oci://ghcr.io/crowbar90/charts
+  chart: oci://ghcr.io/crowbar90/charts/telegram-repeater-bot
   version: "0.2.1"
   targetNamespace: telegram-repeater-bot
   valuesContent: |-
