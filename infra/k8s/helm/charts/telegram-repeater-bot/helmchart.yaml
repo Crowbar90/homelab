@@ -1,0 +1,17 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: telegram-repeater-bot
+  namespace: kube-system
+spec:
+  bootstrap: false
+  chart: telegram-repeater-bot
+  repo: https://ghcr.io/crowbar90/charts
+  version: "0.2.1"
+  targetNamespace: telegram-repeater-bot
+  valuesContent: |-
+    replicaCount: 2
+    bot:
+      inputChatId: "231388170"
+      outputChatId: "-5161691869"
+      outputTopicId: null
