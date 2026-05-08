@@ -6,11 +6,14 @@ metadata:
 spec:
   bootstrap: false
   chart: telegram-repeater-bot
-  repo: https://ghcr.io/crowbar90/charts
+  repo: oci://ghcr.io/crowbar90/charts
   version: "0.2.1"
   targetNamespace: telegram-repeater-bot
   valuesContent: |-
     replicaCount: 2
+    image:
+      repository: ghcr.io/crowbar90/telegram-repeater-bot
+      tag: main
     bot:
       inputChatId: "231388170"
       outputChatId: "-5161691869"
