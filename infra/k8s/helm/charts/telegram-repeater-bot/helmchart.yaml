@@ -9,14 +9,14 @@ spec:
   version: "0.2.1"
   targetNamespace: telegram-repeater-bot
   valuesContent: |-
-    replicaCount: 2
+    replicaCount: 1
     image:
       repository: ghcr.io/crowbar90/telegram-repeater-bot
       tag: main
     bot:
       inputChatId: "231388170"
-      outputChatId: "-5161691869"
-      outputTopicId: null
+      outputChatId: "2074770311"
+      outputTopicId: ""
     secret:
       name: telegram-repeater-bot-secrets
       key: bot-token
