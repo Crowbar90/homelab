@@ -36,6 +36,12 @@ spec:
           hosts:
             - homeassistant.k3s.middleearth.cc
 
+    configuration:
+      enabled: true
+      forceInit: true
+      trusted_proxies:
+        - 10.42.0.36/32
+
     # Optional: Discovery features often need hostNetwork
     # hostNetwork: true
     # dnsPolicy: ClusterFirstWithHostNet
