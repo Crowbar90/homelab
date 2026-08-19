@@ -4,10 +4,9 @@ metadata:
   name: sonarr
   namespace: kube-system
 spec:
-  bootstrap: true
-  chart: app-template/app-template
-  repo: oci://ghcr.io/bjw-s-labs/charts
-  version: "1.7.5"
+  bootstrap: false
+  chart: oci://ghcr.io/bjw-s-labs/charts/app-template/app-template
+  version: "5.1.0"
   targetNamespace: sonarr
   valuesContent: |-
     controllers:
