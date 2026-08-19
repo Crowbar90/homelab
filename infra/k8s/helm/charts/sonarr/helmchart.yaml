@@ -24,9 +24,6 @@ spec:
               SONARR__POSTGRES__PORT: "5432"
               SONARR__POSTGRES__MAINDB: "sonarr-main"
               SONARR__POSTGRES__LOGDB: "sonarr-log"
-            envFrom:
-              - secretRef:
-                  identifier: sonarr-secrets
     service:
       sonarr:
         controller: sonarr
@@ -53,3 +50,7 @@ spec:
         tls:
           - hosts:
               - *host
+  valuesSecrets:
+    - name: sonarr-secrets
+      ignoreUpdates: false
+      keys: controllers
