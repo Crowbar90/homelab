@@ -19,7 +19,7 @@
     ensureUsers = [
       {
         name = "sonarr";
-        ensureDBOwnership = true;
+        ensureDBOwnership = false;
         ensureClauses = {
           login = true;
           password = "SCRAM-SHA-256$4096:VbRn9He+emErOwv7OdEFXg==$9iqS8theS9dQJYtwSLjdKKqphi/E0FyRB0854eFr3w4=:o1yGBdTDFn2S5HZG3Bwu8wlMj950W22wWSPeWMt2AJM=";
