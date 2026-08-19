@@ -5,6 +5,9 @@
   ...
 }:
 
+let
+  sonarrPasswordHash = "SCRAM-SHA-256$4096:346BtNfVTUzxhULOG94xPg==$uoeny9dMx6f/C0Q0iHmdT13pVsuNkiSrhaOkI00x2Gs=:ZM4VddkFPkOHlZG3rinUeGYdsngBWk6QKpJBLaeKYHY=";
+in
 {
   services.postgresql = {
     enable = true;
@@ -22,7 +25,6 @@
         ensureDBOwnership = false;
         ensureClauses = {
           login = true;
-          password = "SCRAM-SHA-256$4096:VbRn9He+emErOwv7OdEFXg==$9iqS8theS9dQJYtwSLjdKKqphi/E0FyRB0854eFr3w4=:o1yGBdTDFn2S5HZG3Bwu8wlMj950W22wWSPeWMt2AJM=";
         };
       }
     ];
@@ -35,6 +37,12 @@
       host    sonarr-log sonarr all scram-sha-256
     '';
   };
+
+  # ensureClauses no longer supports a `password` clause since nixos-25.11,
+  # so set the SCRAM-SHA-256 hash for sonarr via postStart on every restart.
+  systemd.services.postgresql.postStart = lib.mkAfter ''
+    ${pkgs.postgresql_17}/bin/psql -tAc "ALTER USER \"sonarr\" WITH PASSWORD '${sonarrPasswordHash}'"
+  '';
 
   networking.firewall.allowedTCPPorts = [ 5432 ];
 }
