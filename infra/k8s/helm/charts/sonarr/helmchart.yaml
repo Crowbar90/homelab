@@ -27,8 +27,6 @@ spec:
             envFrom:
               - secretRef:
                   identifier: sonarr-secrets
-            ports:
-              - 8989
     service:
       sonarr:
         controller: sonarr
