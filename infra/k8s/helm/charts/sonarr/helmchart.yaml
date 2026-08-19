@@ -27,14 +27,6 @@ spec:
             envFrom:
               - secretRef:
                   identifier: sonarr-secrets
-              SONARR__POSTGRES__USER:
-                secretKeyRef:
-                  name: sonarr-secrets
-                  key: postgresql-user
-              SONARR__POSTGRES__PASSWORD:
-                secretKeyRef:
-                  name: sonarr-secrets
-                  key: postgresql-password
             ports: 8989
     service:
       sonarr:
