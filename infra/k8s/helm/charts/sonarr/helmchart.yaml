@@ -1,0 +1,64 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: sonarr
+  namespace: kube-system
+spec:
+  bootstrap: true
+  chart: app-template/app-template
+  repo: oci://ghcr.io/bjw-s-labs/charts
+  version: "1.7.5"
+  targetNamespace: sonarr
+  valuesContent: |-
+    controllers:
+      sonarr:
+        type: deployment
+        replicas: 1
+        containers:
+          sonarr:
+            image:
+              repository: ghcr.io/hotio/sonarr
+              tag: release-4.0.19.2979
+            env:
+              SONARR__POSTGRES__HOST: "192.168.40.21"
+              SONARR__POSTGRES__PORT: "5432"
+              SONARR__POSTGRES__MAINDB: "sonarr-main"
+              SONARR__POSTGRES__LOGDB: "sonarr-log"
+            envFrom:
+              - secretRef:
+                  identifier: sonarr-secrets
+              SONARR__POSTGRES__USER:
+                secretKeyRef:
+                  name: sonarr-secrets
+                  key: postgresql-user
+              SONARR__POSTGRES__PASSWORD:
+                secretKeyRef:
+                  name: sonarr-secrets
+                  key: postgresql-password
+            ports: 8989
+    service:
+      sonarr:
+        controller: sonarr
+        type: ClusterIP
+        ports:
+          http:
+            port: 8989
+            protocol: http
+            primary: true
+    ingress:
+      sonarr:
+        className: traefik
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        hosts:
+          - host: &host sonarr.k3s.middleearth.cc
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: sonarr
+                  port: http
+        tls:
+          - hosts:
+              - *host
