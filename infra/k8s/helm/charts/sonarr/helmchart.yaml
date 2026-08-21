@@ -19,11 +19,6 @@ spec:
             image:
               repository: ghcr.io/hotio/sonarr
               tag: release-4.0.19.2979
-            env:
-              SONARR__POSTGRES__HOST: "192.168.40.21"
-              SONARR__POSTGRES__PORT: "5432"
-              SONARR__POSTGRES__MAINDB: "sonarr-main"
-              SONARR__POSTGRES__LOGDB: "sonarr-log"
     service:
       sonarr:
         controller: sonarr
