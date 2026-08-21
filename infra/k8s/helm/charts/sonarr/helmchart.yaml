@@ -53,4 +53,5 @@ spec:
   valuesSecrets:
     - name: sonarr-secrets
       ignoreUpdates: false
-      keys: controllers
+      keys:
+        - controllers
