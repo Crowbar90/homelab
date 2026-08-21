@@ -41,7 +41,8 @@ decrypted = subprocess.run(
 import yaml
 
 doc = yaml.safe_load(decrypted)
-password = doc["stringData"]["controllers"]["sonarr"]["containers"]["sonarr"]["env"][
+controllers = yaml.safe_load(doc["stringData"]["controllers"])
+password = controllers["sonarr"]["containers"]["sonarr"]["env"][
     "SONARR__POSTGRES__PASSWORD"
 ]
 
