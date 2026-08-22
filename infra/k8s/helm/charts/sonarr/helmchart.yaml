@@ -43,7 +43,8 @@ spec:
                   identifier: sonarr
                   port: http
         tls:
-          - hosts:
+          - secretName: sonarr-tls
+            hosts:
               - *host
   valuesSecrets:
     - name: sonarr-secrets
