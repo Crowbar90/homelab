@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rclone-torbox
+  namespace: media
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rclone-torbox
+  template:
+    metadata:
+      labels:
+        app: rclone-torbox
+    spec:
+      containers:
+        - name: rclone
+          image: rclone/rclone:latest
+          args:
+            - "mount"
+            - "torbox:"
+            - "/mnt/tower/data/debrid/torbox"
+            - "--vfs-cache-mode=full"
+            - "--vfs-cache-max-size=50G"
+            - "--vfs-read-chunk-size=16M"
+            - "--vfs-read-chunk-size-limit=256M"
+            - "--allow-other"
+            - "--dir-cache-time=10m"
+            - "--poll-interval=15s"
+          envFrom:
+            - secretRef:
+                name: torbox-credentials
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: fuse
+              mountPath: /dev/fuse
+            - name: nfs-media
+              mountPath: /mnt/tower/data
+              mountPropagation: Bidirectional
+      volumes:
+        - name: fuse
+          hostPath:
+            path: /dev/fuse
+        - name: nfs-media
+          persistentVolumeClaim:
+            claimName: nfs-data-pvc
