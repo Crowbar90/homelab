@@ -40,14 +40,14 @@
     ensureUsers = [
       {
         name = "sonarr";
-        ensureDBOwnership = true;
+        ensureDBOwnership = false;
         ensureClauses = {
           login = true;
         };
       }
       {
         name = "prowlarr";
-        ensureDBOwnership = true;
+        ensureDBOwnership = false;
         ensureClauses = {
           login = true;
         };
