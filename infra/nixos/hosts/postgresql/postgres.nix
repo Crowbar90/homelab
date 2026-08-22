@@ -68,11 +68,15 @@
   systemd.services.postgresql.postStart = lib.mkAfter ''
     PSQL="${config.services.postgresql.package}/bin/psql -U postgres"
 
-    # Set user passwords securely from sops secret files
+    # 1. Ensure roles exist idempotently
+    $PSQL -c "DO \$do\$ BEGIN IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'sonarr') THEN CREATE ROLE sonarr WITH LOGIN; END IF; END \$do\$;"
+    $PSQL -c "DO \$do\$ BEGIN IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'prowlarr') THEN CREATE ROLE prowlarr WITH LOGIN; END IF; END \$do\$;"
+
+    # 2. Update passwords from sops-nix secrets
     $PSQL -c "ALTER USER \"sonarr\" WITH PASSWORD '$(cat ${config.sops.secrets."sonarr-pg-password".path})';"
     $PSQL -c "ALTER USER \"prowlarr\" WITH PASSWORD '$(cat ${config.sops.secrets."prowlarr-pg-password".path})';"
 
-    # Assign database ownership cleanly to avoid schema permission issues in PG17
+    # 3. Ensure database ownership
     $PSQL -c "ALTER DATABASE \"sonarr-main\" OWNER TO \"sonarr\";"
     $PSQL -c "ALTER DATABASE \"sonarr-log\" OWNER TO \"sonarr\";"
     $PSQL -c "ALTER DATABASE \"prowlarr-main\" OWNER TO \"prowlarr\";"
