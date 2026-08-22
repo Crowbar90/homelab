@@ -76,11 +76,18 @@
     $PSQL -c "ALTER USER \"sonarr\" WITH PASSWORD '$(cat ${config.sops.secrets."sonarr-pg-password".path})';"
     $PSQL -c "ALTER USER \"prowlarr\" WITH PASSWORD '$(cat ${config.sops.secrets."prowlarr-pg-password".path})';"
 
-    # 3. Ensure database ownership
-    $PSQL -c "ALTER DATABASE \"sonarr-main\" OWNER TO \"sonarr\";"
-    $PSQL -c "ALTER DATABASE \"sonarr-log\" OWNER TO \"sonarr\";"
-    $PSQL -c "ALTER DATABASE \"prowlarr-main\" OWNER TO \"prowlarr\";"
-    $PSQL -c "ALTER DATABASE \"prowlarr-log\" OWNER TO \"prowlarr\";"
+    # 3. Idempotently create databases and assign owners
+    for db in "sonarr-main:sonarr" "sonarr-log:sonarr" "prowlarr-main:prowlarr" "prowlarr-log:prowlarr"; do
+      dbname=''${db%%:*}
+      owner=''${db##*:}
+      
+      # Check if DB exists; if not, create it with the specified owner
+      if ! $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '$dbname'" | grep -q 1; then
+        $PSQL -c "CREATE DATABASE \"$dbname\" OWNER \"$owner\";"
+      else
+        $PSQL -c "ALTER DATABASE \"$dbname\" OWNER TO \"$owner\";"
+      fi
+    done
   '';
 
   networking.firewall.allowedTCPPorts = [ 5432 ];
