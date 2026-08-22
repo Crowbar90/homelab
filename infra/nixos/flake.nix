@@ -27,6 +27,7 @@
         modules = [
           ./modules/base.nix
           ./hosts/postgresql/configuration.nix
+          sops-nix.nixosModules.sops
         ];
       };
 

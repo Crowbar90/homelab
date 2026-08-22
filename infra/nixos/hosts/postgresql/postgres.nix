@@ -1,22 +1,40 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, inputs, ... }:
 
 {
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+  ];
+
+  sops = {
+    defaultSopsFile = ../../secrets.yaml;
+    validateSopsFiles = false;
+    age.keyFile = "/var/lib/sops-nix/key.txt";
+
+    secrets."sonarr-pg-password" = {
+      owner = "postgres";
+      group = "postgres";
+      mode = "0400";
+      restartUnits = [ "postgresql.service" ];
+    };
+  };
+
   services.postgresql = {
     enable = true;
+    package = pkgs.postgresql_17;
+    enableTCPIP = true;
 
     ensureDatabases = [
-      "example"
+      "sonarr-main"
+      "sonarr-log"
     ];
 
     ensureUsers = [
       {
-        name = "example";
-        ensureDBOwnership = true;
+        name = "sonarr";
+        ensureDBOwnership = false;
+        ensureClauses = {
+          login = true;
+        };
       }
     ];
 
@@ -24,8 +42,19 @@
       local   all all trust
       host    all all 127.0.0.1/32 trust
       host    all all ::1/128 trust
+      host    sonarr-main sonarr all scram-sha-256
+      host    sonarr-log sonarr all scram-sha-256
     '';
   };
+
+  # ensureClauses no longer supports a `password` clause since nixos-25.11,
+  # so set the SCRAM-SHA-256 hash for sonarr via postStart on every restart.
+  # The hash is derived from the sops-managed plaintext password so the
+  # secret never has to live in this file or anywhere in the repo in clear.
+  systemd.services.postgresql.postStart = lib.mkAfter ''
+    ${pkgs.postgresql_17}/bin/psql -tAc \
+      "ALTER USER \"sonarr\" WITH PASSWORD '$(cat ${config.sops.secrets."sonarr-pg-password".path})'"
+  '';
 
   networking.firewall.allowedTCPPorts = [ 5432 ];
 }
