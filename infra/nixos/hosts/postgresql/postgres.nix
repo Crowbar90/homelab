@@ -40,14 +40,14 @@
     ensureUsers = [
       {
         name = "sonarr";
-        ensureDBOwnership = false;
+        ensureDBOwnership = true;
         ensureClauses = {
           login = true;
         };
       }
       {
         name = "prowlarr";
-        ensureDBOwnership = false;
+        ensureDBOwnership = true;
         ensureClauses = {
           login = true;
         };
@@ -66,13 +66,17 @@
   };
 
   systemd.services.postgresql.postStart = lib.mkAfter ''
-    ${pkgs.postgresql_17}/bin/psql -tAc "ALTER USER \"sonarr\" WITH PASSWORD '$(cat ${config.sops.secrets."sonarr-pg-password".path})'"
-    ${pkgs.postgresql_17}/bin/psql -d sonarr-main -tAc 'GRANT ALL ON SCHEMA public TO "sonarr";'
-    ${pkgs.postgresql_17}/bin/psql -d sonarr-log -tAc 'GRANT ALL ON SCHEMA public TO "sonarr";'
+    PSQL="${config.services.postgresql.package}/bin/psql -U postgres"
 
-    ${pkgs.postgresql_17}/bin/psql -tAc "ALTER USER \"prowlarr\" WITH PASSWORD '$(cat ${config.sops.secrets."prowlarr-pg-password".path})'"
-    ${pkgs.postgresql_17}/bin/psql -d prowlarr-main -tAc 'GRANT ALL ON SCHEMA public TO "prowlarr";'
-    ${pkgs.postgresql_17}/bin/psql -d prowlarr-log -tAc 'GRANT ALL ON SCHEMA public TO "prowlarr";'
+    # Set user passwords securely from sops secret files
+    $PSQL -c "ALTER USER \"sonarr\" WITH PASSWORD '$(cat ${config.sops.secrets."sonarr-pg-password".path})';"
+    $PSQL -c "ALTER USER \"prowlarr\" WITH PASSWORD '$(cat ${config.sops.secrets."prowlarr-pg-password".path})';"
+
+    # Assign database ownership cleanly to avoid schema permission issues in PG17
+    $PSQL -c "ALTER DATABASE \"sonarr-main\" OWNER TO \"sonarr\";"
+    $PSQL -c "ALTER DATABASE \"sonarr-log\" OWNER TO \"sonarr\";"
+    $PSQL -c "ALTER DATABASE \"prowlarr-main\" OWNER TO \"prowlarr\";"
+    $PSQL -c "ALTER DATABASE \"prowlarr-log\" OWNER TO \"prowlarr\";"
   '';
 
   networking.firewall.allowedTCPPorts = [ 5432 ];
