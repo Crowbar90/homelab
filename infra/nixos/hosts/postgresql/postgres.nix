@@ -54,6 +54,11 @@
   systemd.services.postgresql.postStart = lib.mkAfter ''
     ${pkgs.postgresql_17}/bin/psql -tAc \
       "ALTER USER \"sonarr\" WITH PASSWORD '$(cat ${config.sops.secrets."sonarr-pg-password".path})'"
+    # PostgreSQL 15+ restricts CREATE on the public schema to its owner, which is
+    # `postgres` for DBs created by ensureDatabases. Grant schema access so Sonarr
+    # (non-owner) can run its migrations.
+    ${pkgs.postgresql_17}/bin/psql -d sonarr-main -tAc 'GRANT ALL ON SCHEMA public TO "sonarr";'
+    ${pkgs.postgresql_17}/bin/psql -d sonarr-log -tAc 'GRANT ALL ON SCHEMA public TO "sonarr";'
   '';
 
   networking.firewall.allowedTCPPorts = [ 5432 ];
