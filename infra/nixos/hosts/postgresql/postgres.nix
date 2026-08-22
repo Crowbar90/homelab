@@ -16,6 +16,13 @@
       mode = "0400";
       restartUnits = [ "postgresql.service" ];
     };
+
+    secrets."prowlarr-pg-password" = {
+      owner = "postgres";
+      group = "postgres";
+      mode = "0400";
+      restartUnits = [ "postgresql.service" ];
+    };
   };
 
   services.postgresql = {
