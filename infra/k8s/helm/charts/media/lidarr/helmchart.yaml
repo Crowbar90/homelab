@@ -1,0 +1,79 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: lidarr
+  namespace: kube-system
+spec:
+  bootstrap: false
+  chart: app-template
+  repo: https://bjw-s-labs.github.io/helm-charts
+  version: "5.1.0"
+  targetNamespace: media
+  valuesContent: |-
+    controllers:
+      lidarr:
+        type: deployment
+        replicas: 1
+        containers:
+          lidarr:
+            image:
+              repository: ghcr.io/hotio/lidarr
+              tag: release-6.3.0.10514
+            env:
+              - name: LIDARR__POSTGRES__HOST
+                value: "192.168.40.21"
+              - name: LIDARR__POSTGRES__PORT
+                value: "5432"
+              - name: LIDARR__POSTGRES__MAINDB
+                value: "lidarr-main"
+              - name: LIDARR__POSTGRES__LOGDB
+                value: "lidarr-log"
+              - name: LIDARR__POSTGRES__USER
+                value: "lidarr"
+              - name: LIDARR__POSTGRES__PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: lidarr-secrets
+                    key: LIDARR__POSTGRES__PASSWORD
+    service:
+      lidarr:
+        controller: lidarr
+        type: ClusterIP
+        ports:
+          http:
+            port: 8686
+            protocol: HTTP
+            primary: true
+    ingress:
+      lidarr:
+        className: traefik
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        hosts:
+          - host: &host lidarr.k3s.middleearth.cc
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: lidarr
+                  port: http
+        tls:
+          - secretName: lidarr-tls
+            hosts:
+              - *host
+    persistence:
+      config:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteMany
+        retain: true
+        size: 200Mi
+        storageClass: nfs-client
+        suffix: config
+        globalMounts:
+          - path: /config
+      data:
+        type: persistentVolumeClaim
+        existingClaim: nfs-data-pvc
+        globalMounts:
+          - path: /mnt/tower/data
