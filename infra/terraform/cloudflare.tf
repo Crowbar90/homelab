@@ -35,7 +35,7 @@ resource "cloudflare_dns_record" "k3s_wildcard" {
 resource "cloudflare_dns_record" "jellyfin_root" {
   zone_id = var.cloudflare_zone_id
   name    = "jellyfin"
-  content = "192.168.40.40"
+  content = "192.168.40.31"
   type    = "A"
   proxied = false
   ttl     = 1
