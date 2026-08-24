@@ -13,6 +13,7 @@ output "k3s_tunnel_token" {
   value = data.cloudflare_zero_trust_tunnel_cloudflared_token.k3s_tunnel_token.token
   sensitive = true
 }
+
 resource "cloudflare_dns_record" "k3s_root" {
   zone_id = var.cloudflare_zone_id
   name    = "k3s"
@@ -27,6 +28,15 @@ resource "cloudflare_dns_record" "k3s_wildcard" {
   name    = "*.k3s"
   content = "k3s.middleearth.cc"
   type    = "CNAME"
+  proxied = false
+  ttl     = 1
+}
+
+resource "cloudflare_dns_record" "k3s_root" {
+  zone_id = var.cloudflare_zone_id
+  name    = "jellyfin"
+  content = "192.168.40.40"
+  type    = "A"
   proxied = false
   ttl     = 1
 }
