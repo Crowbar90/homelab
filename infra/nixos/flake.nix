@@ -60,5 +60,15 @@
           sops-nix.nixosModules.sops
         ];
       };
+
+      nixosConfigurations.jellyfin = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./modules/base.nix
+          ./hosts/jellyfin/configuration.nix
+          sops-nix.nixosModules.sops
+        ];
+      };
     };
 }
