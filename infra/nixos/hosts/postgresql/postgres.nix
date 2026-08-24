@@ -23,6 +23,13 @@
       mode = "0400";
       restartUnits = [ "postgresql.service" ];
     };
+
+    secrets."radarr-pg-password" = {
+      owner = "postgres";
+      group = "postgres";
+      mode = "0400";
+      restartUnits = [ "postgresql.service" ];
+    };
   };
 
   services.postgresql = {
@@ -35,6 +42,8 @@
       "sonarr-log"
       "prowlarr-main"
       "prowlarr-log"
+      "radarr-main"
+      "radarr-log"
     ];
 
     ensureUsers = [
@@ -52,6 +61,13 @@
           login = true;
         };
       }
+      {
+        name = "radarr";
+        ensureDBOwnership = false;
+        ensureClauses = {
+          login = true;
+        };
+      }
     ];
 
     authentication = lib.mkOverride 10 ''
@@ -62,6 +78,8 @@
       host    sonarr-log sonarr all scram-sha-256
       host    prowlarr-main prowlarr all scram-sha-256
       host    prowlarr-log prowlarr all scram-sha-256
+      host    radarr-main radarr all scram-sha-256
+      host    radarr-log radarr all scram-sha-256
     '';
   };
 
@@ -71,13 +89,15 @@
     # 1. Ensure roles exist idempotently
     $PSQL -c "DO \$do\$ BEGIN IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'sonarr') THEN CREATE ROLE sonarr WITH LOGIN; END IF; END \$do\$;"
     $PSQL -c "DO \$do\$ BEGIN IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'prowlarr') THEN CREATE ROLE prowlarr WITH LOGIN; END IF; END \$do\$;"
+    $PSQL -c "DO \$do\$ BEGIN IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'radarr') THEN CREATE ROLE radarr WITH LOGIN; END IF; END \$do\$;"
 
     # 2. Update passwords from sops-nix secrets
     $PSQL -c "ALTER USER \"sonarr\" WITH PASSWORD '$(cat ${config.sops.secrets."sonarr-pg-password".path})';"
     $PSQL -c "ALTER USER \"prowlarr\" WITH PASSWORD '$(cat ${config.sops.secrets."prowlarr-pg-password".path})';"
+    $PSQL -c "ALTER USER \"radarr\" WITH PASSWORD '$(cat ${config.sops.secrets."radarr-pg-password".path})';"
 
     # 3. Idempotently create databases and assign owners
-    for db in "sonarr-main:sonarr" "sonarr-log:sonarr" "prowlarr-main:prowlarr" "prowlarr-log:prowlarr"; do
+    for db in "sonarr-main:sonarr" "sonarr-log:sonarr" "prowlarr-main:prowlarr" "prowlarr-log:prowlarr" "radarr-main:radarr" "radarr-log:radarr"; do
       dbname=''${db%%:*}
       owner=''${db##*:}
       
