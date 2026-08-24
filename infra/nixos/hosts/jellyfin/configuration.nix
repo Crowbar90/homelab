@@ -16,5 +16,8 @@
   fileSystems."/mnt/tower/data" = {
     device = "192.168.40.2:/mnt/user/data";
     fsType = "nfs";
+    options = [
+      "auto"
+    ];
   };
 }
