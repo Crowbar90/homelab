@@ -41,7 +41,7 @@ spec:
         type: ClusterIP
         ports:
           http:
-            port: 8989
+            port: 7878
             protocol: HTTP
             primary: true
     ingress:
