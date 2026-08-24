@@ -14,6 +14,15 @@
       owner = "caddy";
       group = "caddy";
       mode = "0400";
+    };
+
+    templates."caddy-env" = {
+      owner = "caddy";
+      group = "caddy";
+      mode = "0400";
+      content = ''
+        CLOUDFLARE_API_TOKEN="${config.sops.placeholder."cloudflare-api-token"}"
+      '';
       restartUnits = [ "caddy.service" ];
     };
   };
@@ -34,10 +43,14 @@
       reverse_proxy http://localhost:8096
       
       tls {
-        dns cloudflare "${config.sops.secrets."cloudflare-api-token".path}"
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
       }
     '';
   };
+
+  systemd.services.caddy.serviceConfig.EnvironmentFile = [
+    config.sops.templates."caddy-env".path
+  ];
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 }
