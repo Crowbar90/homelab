@@ -18,7 +18,7 @@ spec:
           lidarr:
             image:
               repository: ghcr.io/hotio/lidarr
-              tag: release-6.3.0.10514
+              tag: release-3.1.0.4875
             env:
               - name: LIDARR__POSTGRES__HOST
                 value: "192.168.40.21"
