@@ -1,7 +1,7 @@
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: sonarr
+  name: lidarr
   namespace: kube-system
 spec:
   bootstrap: false
@@ -11,55 +11,55 @@ spec:
   targetNamespace: media
   valuesContent: |-
     controllers:
-      sonarr:
+      lidarr:
         type: deployment
         replicas: 1
         containers:
-          sonarr:
+          lidarr:
             image:
-              repository: ghcr.io/hotio/sonarr
-              tag: release-4.0.19.2979
+              repository: ghcr.io/hotio/lidarr
+              tag: release-6.3.0.10514
             env:
-              - name: SONARR__POSTGRES__HOST
+              - name: LIDARR__POSTGRES__HOST
                 value: "192.168.40.21"
-              - name: SONARR__POSTGRES__PORT
+              - name: LIDARR__POSTGRES__PORT
                 value: "5432"
-              - name: SONARR__POSTGRES__MAINDB
-                value: "sonarr-main"
-              - name: SONARR__POSTGRES__LOGDB
-                value: "sonarr-log"
-              - name: SONARR__POSTGRES__USER
-                value: "sonarr"
-              - name: SONARR__POSTGRES__PASSWORD
+              - name: LIDARR__POSTGRES__MAINDB
+                value: "lidarr-main"
+              - name: LIDARR__POSTGRES__LOGDB
+                value: "lidarr-log"
+              - name: LIDARR__POSTGRES__USER
+                value: "lidarr"
+              - name: LIDARR__POSTGRES__PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: sonarr-secrets
-                    key: SONARR__POSTGRES__PASSWORD
+                    name: lidarr-secrets
+                    key: LIDARR__POSTGRES__PASSWORD
     service:
-      sonarr:
-        controller: sonarr
+      lidarr:
+        controller: lidarr
         type: ClusterIP
         ports:
           http:
-            port: 8989
+            port: 8686
             protocol: HTTP
             primary: true
     ingress:
-      sonarr:
+      lidarr:
         className: traefik
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-cloudflare
           traefik.ingress.kubernetes.io/router.entrypoints: websecure
         hosts:
-          - host: &host sonarr.k3s.middleearth.cc
+          - host: &host lidarr.k3s.middleearth.cc
             paths:
               - path: /
                 pathType: Prefix
                 service:
-                  identifier: sonarr
+                  identifier: lidarr
                   port: http
         tls:
-          - secretName: sonarr-tls
+          - secretName: lidarr-tls
             hosts:
               - *host
     persistence:
