@@ -18,7 +18,7 @@ spec:
           radarr:
             image:
               repository: ghcr.io/hotio/radarr
-              tag: release-6.3.0.10514
+              tag: release-6.4.4.10685
             env:
               - name: RADARR__POSTGRES__HOST
                 value: "192.168.40.21"

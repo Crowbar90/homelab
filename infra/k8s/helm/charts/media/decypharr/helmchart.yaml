@@ -18,7 +18,7 @@ spec:
           decypharr:
             image:
               repository: cy01/blackhole
-              tag: v2.5
+              tag: v2.7
             securityContext:
               privileged: true
     service:
