@@ -40,7 +40,7 @@
     };
     
     virtualHosts."jellyfin.middleearth.cc".extraConfig = ''
-      reverse_proxy http://localhost:8096
+      reverse_proxy 127.0.0.1:8096
       
       tls {
         dns cloudflare {env.CLOUDFLARE_API_TOKEN}
