@@ -1,0 +1,30 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: flaresolverr
+  namespace: kube-system
+spec:
+  bootstrap: false
+  chart: app-template
+  repo: https://bjw-s-labs.github.io/helm-charts
+  version: "5.1.0"
+  targetNamespace: media
+  valuesContent: |-
+    controllers:
+      flaresolverr:
+        type: deployment
+        replicas: 1
+        containers:
+          prowlarr:
+            image:
+              repository: ghcr.io/flaresolverr/flaresolverr
+              tag: v3.5.2
+    service:
+      flaresolverr:
+        controller: flaresolverr
+        type: ClusterIP
+        ports:
+          http:
+            port: 8191
+            protocol: HTTP
+            primary: true
