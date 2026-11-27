@@ -18,7 +18,7 @@ spec:
           radarr:
             image:
               repository: ghcr.io/xbit18/violarr
-              tag: "1.2.0"
+              tag: "1.2"
     service:
       violarr:
         controller: violarr

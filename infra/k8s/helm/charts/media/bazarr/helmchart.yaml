@@ -18,7 +18,7 @@ spec:
           bazarr:
             image:
               repository: ghcr.io/hotio/bazarr
-              tag: release-1.6.2
+              tag: release
     service:
       bazarr:
         controller: bazarr
